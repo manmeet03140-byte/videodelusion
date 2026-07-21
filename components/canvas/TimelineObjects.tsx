@@ -63,10 +63,11 @@ export default function TimelineObjects({ scrollProgress }: TimelineObjectsProps
     }
 
     // Scale for vertical screens to prevent cropping text
+    // The longest text is about 6.5 units wide.
     if (groupRef.current) {
-      const aspect = viewport.aspect;
-      const scale = aspect < 1 ? aspect * 1.5 : 1; 
-      groupRef.current.scale.setScalar(Math.min(scale, 1));
+      const targetWidth = 6.8;
+      const scale = viewport.width < targetWidth ? viewport.width / targetWidth : 1;
+      groupRef.current.scale.setScalar(scale);
     }
   });
 

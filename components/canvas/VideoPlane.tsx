@@ -154,9 +154,10 @@ export default function VideoPlane() {
     }
 
     // Scale for vertical screens to prevent clipping the animation
-    const aspect = viewport.aspect;
-    const scale = aspect < 1 ? aspect * 1.5 : 1; 
-    meshRef.current.scale.setScalar(Math.min(scale, 1));
+    // The VideoPlane is 7.11 units wide. We want it to fit within viewport.width.
+    const targetWidth = 7.5; // slight padding
+    const scale = viewport.width < targetWidth ? viewport.width / targetWidth : 1;
+    meshRef.current.scale.setScalar(scale);
 
     // Slight idle mesh float
     meshRef.current.rotation.y = Math.sin(clock.elapsedTime * 0.3) * 0.04;
