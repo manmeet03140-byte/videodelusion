@@ -13,7 +13,7 @@ export default function ColorGrader() {
       <style>{`
         @media (max-width: 768px) {
           #color-grader-panel {
-            bottom: 12px !important;
+            bottom: 60px !important;
             right: 12px !important;
             left: 12px !important;
             width: calc(100vw - 24px) !important;

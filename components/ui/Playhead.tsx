@@ -44,7 +44,7 @@ export default function Playhead() {
         borderTop: '1px solid rgba(255,255,255,0.06)',
       }}
     >
-      <div className="flex items-center gap-4 px-6 py-2.5">
+      <div className="flex items-center gap-2 px-2 md:gap-4 md:px-6 py-2.5">
         {/* Play icon + TC */}
         <div className="flex items-center gap-2 shrink-0">
           <svg width="10" height="10" viewBox="0 0 10 10" className="text-cyan-400 fill-current">
