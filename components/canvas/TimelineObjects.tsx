@@ -20,8 +20,9 @@ export default function TimelineObjects({ scrollProgress }: TimelineObjectsProps
   const ctaRef = useRef<any>(null);
   const ringRef = useRef<THREE.Mesh>(null);
   const torusRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock, viewport }) => {
     const p = scrollProgress.current;
     const t = clock.elapsedTime;
 
@@ -60,10 +61,17 @@ export default function TimelineObjects({ scrollProgress }: TimelineObjectsProps
     if (ctaRef.current) {
       ctaRef.current.fillOpacity = ctaAlpha;
     }
+
+    // Scale for vertical screens to prevent cropping text
+    if (groupRef.current) {
+      const aspect = viewport.aspect;
+      const scale = aspect < 1 ? aspect * 1.5 : 1; 
+      groupRef.current.scale.setScalar(Math.min(scale, 1));
+    }
   });
 
   return (
-    <group>
+    <group ref={groupRef}>
       {/* ── Hero chapter ── */}
       <Text
         ref={nameRef}

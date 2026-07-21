@@ -52,17 +52,17 @@ export default function NavBar({ onOpenSkills }: { onOpenSkills: () => void }) {
       setRootPos({ x: 12, y: 110 });
       setNodes((prev) => ({
         ...prev,
-        work: { ...prev.work, x: 90, y: 50 },
-        work_motion: { ...prev.work_motion, x: 180, y: 10 },
-        work_color: { ...prev.work_color, x: 180, y: 50 },
-        work_animation: { ...prev.work_animation, x: 180, y: 90 },
+        work: { ...prev.work, x: 130, y: 50 },
+        work_motion: { ...prev.work_motion, x: 220, y: 10 },
+        work_color: { ...prev.work_color, x: 220, y: 50 },
+        work_animation: { ...prev.work_animation, x: 220, y: 90 },
         
-        skills: { ...prev.skills, x: 90, y: 110 },
+        skills: { ...prev.skills, x: 130, y: 110 },
         
-        contact: { ...prev.contact, x: 90, y: 170 },
-        contact_email: { ...prev.contact_email, x: 180, y: 140 },
-        contact_instagram: { ...prev.contact_instagram, x: 180, y: 180 },
-        contact_call: { ...prev.contact_call, x: 180, y: 220 },
+        contact: { ...prev.contact, x: 130, y: 170 },
+        contact_email: { ...prev.contact_email, x: 220, y: 140 },
+        contact_instagram: { ...prev.contact_instagram, x: 220, y: 180 },
+        contact_call: { ...prev.contact_call, x: 220, y: 220 },
       }));
     }
   }, []);
