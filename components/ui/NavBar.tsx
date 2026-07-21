@@ -47,6 +47,21 @@ export default function NavBar({ onOpenSkills }: { onOpenSkills: () => void }) {
   const nodeStart = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
+    // Make layout compact for mobile
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setRootPos({ x: 12, y: 115 });
+      setNodes((prev) => {
+        const adjusted = { ...prev };
+        for (const key in adjusted) {
+          // Compress x coordinates by half and add a small offset
+          adjusted[key] = { ...adjusted[key], x: adjusted[key].x * 0.5 + 40 };
+        }
+        return adjusted;
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
       if (!draggingNode) return;
 
@@ -189,6 +204,7 @@ export default function NavBar({ onOpenSkills }: { onOpenSkills: () => void }) {
           cursor: draggingNode === 'root' ? 'grabbing' : 'grab',
           pointerEvents: 'auto',
           userSelect: 'none',
+          touchAction: 'none',
           transition: draggingNode === 'root' ? 'none' : 'background 0.2s, border-color 0.2s',
         }}
       >
@@ -246,6 +262,7 @@ export default function NavBar({ onOpenSkills }: { onOpenSkills: () => void }) {
               cursor: isDragging ? 'grabbing' : 'grab',
               pointerEvents: 'auto',
               userSelect: 'none',
+              touchAction: 'none',
             }}
             draggable={false}
           >

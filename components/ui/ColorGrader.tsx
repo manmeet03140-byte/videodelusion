@@ -9,9 +9,25 @@ export default function ColorGrader() {
   const [isVisible, setIsVisible] = useState(true);
 
   return (
-    <div
-      id="color-grader-panel"
-      style={{
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          #color-grader-panel {
+            bottom: 12px !important;
+            right: 12px !important;
+            left: 12px !important;
+            width: calc(100vw - 24px) !important;
+            max-width: 420px;
+          }
+          .color-wheels-container {
+            flex-wrap: wrap;
+            justify-content: center !important;
+          }
+        }
+      `}</style>
+      <div
+        id="color-grader-panel"
+        style={{
         position: 'fixed',
         bottom: '72px',
         right: '24px',
@@ -68,7 +84,7 @@ export default function ColorGrader() {
       {isVisible && (
         <>
           {/* Wheels Container */}
-          <div style={{ 
+          <div className="color-wheels-container" style={{ 
             padding: '20px 16px', 
             display: 'flex', 
             justifyContent: 'space-between', 
@@ -125,6 +141,7 @@ export default function ColorGrader() {
           </div>
         </>
       )}
-    </div>
+      </div>
+    </>
   );
 }
