@@ -47,17 +47,23 @@ export default function NavBar({ onOpenSkills }: { onOpenSkills: () => void }) {
   const nodeStart = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Make layout compact for mobile
+    // Make layout compact for mobile with specific coordinates to avoid overlaps
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      setRootPos({ x: 12, y: 115 });
-      setNodes((prev) => {
-        const adjusted = { ...prev };
-        for (const key in adjusted) {
-          // Compress x coordinates by half and add a small offset
-          adjusted[key] = { ...adjusted[key], x: adjusted[key].x * 0.5 + 40 };
-        }
-        return adjusted;
-      });
+      setRootPos({ x: 12, y: 110 });
+      setNodes((prev) => ({
+        ...prev,
+        work: { ...prev.work, x: 120, y: 50 },
+        work_motion: { ...prev.work_motion, x: 210, y: 10 },
+        work_color: { ...prev.work_color, x: 210, y: 50 },
+        work_animation: { ...prev.work_animation, x: 210, y: 90 },
+        
+        skills: { ...prev.skills, x: 120, y: 110 },
+        
+        contact: { ...prev.contact, x: 120, y: 170 },
+        contact_email: { ...prev.contact_email, x: 210, y: 140 },
+        contact_instagram: { ...prev.contact_instagram, x: 210, y: 180 },
+        contact_call: { ...prev.contact_call, x: 210, y: 220 },
+      }));
     }
   }, []);
 

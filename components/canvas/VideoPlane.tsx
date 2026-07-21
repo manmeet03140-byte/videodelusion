@@ -82,7 +82,7 @@ export default function VideoPlane() {
     glitchTarget.current = clicked ? 0.9 : hovered ? 0.45 : 0.0;
   }, [hovered, clicked]);
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock, viewport }) => {
     if (!meshRef.current) return;
     const mat = meshRef.current.material as THREE.ShaderMaterial;
 
@@ -153,6 +153,10 @@ export default function VideoPlane() {
       if (fallbackTexture) fallbackTexture.needsUpdate = true;
     }
 
+    // Scale for vertical screens to prevent clipping the animation
+    const aspect = viewport.aspect;
+    const scale = aspect < 1 ? aspect * 1.5 : 1; 
+    meshRef.current.scale.setScalar(Math.min(scale, 1));
 
     // Slight idle mesh float
     meshRef.current.rotation.y = Math.sin(clock.elapsedTime * 0.3) * 0.04;
