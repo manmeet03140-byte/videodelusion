@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useUIState } from '@/hooks/useUIState';
 
 type NodeConfig = {
   id: string;
@@ -25,6 +27,8 @@ const initialNodes: Record<string, NodeConfig> = {
   contact_email: { id: 'contact_email', label: 'Email', x: 350, y: 125, width: 80, parentId: 'contact', href: 'mailto:manmeet03140@gmail.com' },
   contact_instagram: { id: 'contact_instagram', label: 'Instagram', x: 350, y: 165, width: 100, parentId: 'contact', href: 'https://youtube.com/shorts/GQNW1IlvhcY?si=HQdhOxmYOpX94HW8' },
   contact_call: { id: 'contact_call', label: 'Call', x: 350, y: 205, width: 80, parentId: 'contact', href: 'tel:+918264737223' },
+
+  labs: { id: 'labs', label: 'Labs / Pipeline', x: 200, y: 215, width: 150, parentId: 'root' },
 };
 
 type NodeId = keyof typeof initialNodes;
@@ -63,6 +67,8 @@ export default function NavBar({ onOpenSkills }: { onOpenSkills: () => void }) {
         contact_email: { ...prev.contact_email, x: 220, y: 140 },
         contact_instagram: { ...prev.contact_instagram, x: 220, y: 180 },
         contact_call: { ...prev.contact_call, x: 220, y: 220 },
+        
+        labs: { ...prev.labs, x: 130, y: 230 },
       }));
     }
   }, []);
@@ -116,10 +122,35 @@ export default function NavBar({ onOpenSkills }: { onOpenSkills: () => void }) {
     }
   };
 
+  const { setBeforeAfterOpen, setStudioManagerOpen, setLabsOpen, isWork3DActive, setWork3DActive } = useUIState();
+
   const handleNodeClick = (id: NodeId, e: React.MouseEvent) => {
     if (id === 'skills') {
       e.preventDefault();
       onOpenSkills();
+      return;
+    }
+    if (id === 'labs') {
+      e.preventDefault();
+      setLabsOpen(true);
+      return;
+    }
+    if (id === 'contact') {
+      e.preventDefault();
+      setStudioManagerOpen(true);
+      return;
+    }
+    if (id === 'work_color') {
+      e.preventDefault();
+      setBeforeAfterOpen(true);
+      return;
+    }
+    if (id === 'work') {
+      e.preventDefault();
+      setWork3DActive(!isWork3DActive);
+      // We can also let it expand normally by continuing, or just return.
+      // Returning will stop the children nodes from expanding if we just want the 3D action.
+      // But we will let it continue to expand the 2D menu as well for now.
     }
 
     // Toggle expand/collapse if node has children

@@ -5,6 +5,9 @@ import NavBar from './NavBar';
 import ColorGrader from './ColorGrader';
 import Playhead from './Playhead';
 import SkillsInspector from './SkillsInspector';
+import BeforeAfterSlider from './BeforeAfterSlider';
+import StudioManagerFlow from './StudioManagerFlow';
+import LabsPanel from './LabsPanel';
 
 /**
  * Transparent HUD layer that sits above the WebGL canvas.
@@ -48,6 +51,11 @@ export default function Overlay() {
 
       {/* Skills Inspector Panel */}
       <SkillsInspector isOpen={isSkillsOpen} onClose={() => setIsSkillsOpen(false)} />
+
+      {/* New Portfolio Upgrades */}
+      <BeforeAfterSlider />
+      <StudioManagerFlow />
+      <LabsPanel />
 
       {/* Scroll hint */}
       <div

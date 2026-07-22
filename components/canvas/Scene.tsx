@@ -7,6 +7,7 @@ import CameraRig from './CameraRig';
 import VideoPlane from './VideoPlane';
 import ParticleField from './ParticleField';
 import TimelineObjects from './TimelineObjects';
+import WorkPanels from './WorkPanels';
 import { useColorGrade } from '@/hooks/useColorGrade';
 
 interface SceneProps {
@@ -80,6 +81,7 @@ export default function Scene({ scrollProgress }: SceneProps) {
         <VideoPlane />
         <ParticleField />
         <TimelineObjects scrollProgress={scrollProgress} />
+        <WorkPanels />
       </Suspense>
     </Canvas>
   );
