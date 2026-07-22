@@ -78,7 +78,7 @@ export default function Scene({ scrollProgress }: SceneProps) {
         <CameraRig scrollProgress={scrollProgress} />
 
         {/* Core 3D elements */}
-        <VideoPlane />
+        <VideoPlane scrollProgress={scrollProgress} />
         <ParticleField />
         <TimelineObjects scrollProgress={scrollProgress} />
         <WorkPanels />

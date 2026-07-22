@@ -49,65 +49,61 @@ export default function BeforeAfterSlider() {
         [ Close ]
       </button>
 
-      <div 
-        ref={containerRef}
-        className="relative w-[90vw] max-w-6xl aspect-video bg-[#0a0a0a] rounded-lg overflow-hidden shadow-2xl cursor-ew-resize border border-white/10"
-        onPointerDown={(e) => {
-          setIsDragging(true);
-          // Initial jump to click position
-          const rect = e.currentTarget.getBoundingClientRect();
-          const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-          setSliderPosition((x / rect.width) * 100);
-        }}
-      >
-        {/* Right side (Final Grade) - Base Layer */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none">
+      <div className="relative w-[90vw] max-w-6xl flex flex-col gap-6 items-center">
+        {/* Video Container */}
+        <div className="relative w-full aspect-video bg-[#0a0a0a] rounded-lg overflow-hidden shadow-2xl border border-white/10 pointer-events-none">
           <video 
-            src="/reel.mp4" 
+            src="/16-10_1.mp4" 
             autoPlay 
             loop 
             muted 
             playsInline
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-all duration-75"
+            style={{ 
+              filter: `contrast(${0.7 + 0.3 * (sliderPosition / 100)}) saturate(${0.3 + 0.7 * (sliderPosition / 100)}) brightness(${1.2 - 0.2 * (sliderPosition / 100)})` 
+            }}
           />
-          <div className="absolute top-4 right-4 bg-black/60 backdrop-blur px-3 py-1 rounded text-[#00FFE0] font-mono text-xs border border-[#00FFE0]/30 tracking-widest uppercase">
+          <div className="absolute top-4 right-4 bg-black/60 backdrop-blur px-3 py-1 rounded text-[#00FFE0] font-mono text-xs border border-[#00FFE0]/30 tracking-widest uppercase transition-opacity" style={{ opacity: sliderPosition / 100 }}>
             Final Grade
           </div>
-        </div>
-
-        {/* Left side (LOG / Flat) - Clipped Layer */}
-        <div 
-          className="absolute inset-0 h-full pointer-events-none border-r-2 border-[#00FFE0]"
-          style={{ 
-            width: `${sliderPosition}%`, 
-            filter: 'contrast(0.7) saturate(0.3) brightness(1.2)' // Simulating LOG
-          }}
-        >
-          <video 
-            src="/reel.mp4" 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="absolute top-0 left-0 w-[90vw] max-w-6xl aspect-video object-cover"
-          />
-          <div className="absolute top-4 left-4 bg-black/60 backdrop-blur px-3 py-1 rounded text-white/70 font-mono text-xs border border-white/20 tracking-widest uppercase">
+          <div className="absolute top-4 left-4 bg-black/60 backdrop-blur px-3 py-1 rounded text-white/70 font-mono text-xs border border-white/20 tracking-widest uppercase transition-opacity" style={{ opacity: 1 - (sliderPosition / 100) }}>
             Raw (LOG)
           </div>
         </div>
 
-        {/* Custom Slider Handle */}
-        <div 
-          className="absolute top-0 bottom-0 w-1 flex items-center justify-center pointer-events-none"
-          style={{ left: `calc(${sliderPosition}% - 2px)` }}
-        >
-          <div className="w-8 h-16 bg-[#1a1a1a] border-2 border-[#00FFE0] rounded-sm flex items-center justify-center shadow-[0_0_15px_rgba(0,255,224,0.3)]">
-            <div className="w-1 h-8 flex gap-[2px]">
-              <div className="w-[1px] h-full bg-[#00FFE0]/50" />
-              <div className="w-[1px] h-full bg-[#00FFE0]/50" />
-              <div className="w-[1px] h-full bg-[#00FFE0]/50" />
+        {/* Global Color Grade Slider */}
+        <div className="w-full max-w-2xl px-6 py-4 flex items-center gap-6 bg-black/80 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl">
+          <span className="text-white/50 font-mono text-xs uppercase tracking-widest w-12 text-right">RAW</span>
+          
+          <div 
+            ref={containerRef}
+            className="relative flex-1 h-10 flex items-center cursor-pointer touch-none group"
+            onPointerDown={(e) => {
+              setIsDragging(true);
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+              setSliderPosition((x / rect.width) * 100);
+            }}
+          >
+            {/* Track Background */}
+            <div className="absolute left-0 right-0 h-1.5 bg-white/10 rounded-full overflow-hidden">
+              {/* Active Track */}
+              <div 
+                className="h-full bg-gradient-to-r from-white/20 to-[#00FFE0]"
+                style={{ width: `${sliderPosition}%` }}
+              />
+            </div>
+            
+            {/* Thumb */}
+            <div 
+              className="absolute w-6 h-6 bg-[#00FFE0] rounded-full shadow-[0_0_15px_rgba(0,255,224,0.6)] flex items-center justify-center -ml-3 pointer-events-none group-hover:scale-110 transition-transform"
+              style={{ left: `${sliderPosition}%` }}
+            >
+              <div className="w-2 h-2 bg-black rounded-full" />
             </div>
           </div>
+
+          <span className="text-[#00FFE0] font-mono text-xs uppercase tracking-widest w-12 text-left">GRADED</span>
         </div>
       </div>
     </div>

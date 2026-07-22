@@ -57,6 +57,7 @@ export const glitchFragmentShader = /* glsl */ `
   uniform sampler2D uVideoTexture;
   uniform float uGlitch;
   uniform float uTime;
+  uniform float uGradeAmount;
   varying vec2 vUv;
   varying float vDisplace;
 
@@ -70,6 +71,15 @@ export const glitchFragmentShader = /* glsl */ `
     float b = texture2D(uVideoTexture, vUv - dir * aberration).b;
 
     vec3 color = vec3(r, g, b);
+
+    // LOG Simulation (flat, low contrast, low saturation)
+    vec3 logColor = color;
+    logColor = mix(vec3(0.5), logColor, 0.4); // reduce contrast
+    logColor = mix(vec3(dot(logColor, vec3(0.299, 0.587, 0.114))), logColor, 0.4); // reduce saturation
+    logColor *= 1.1; // slightly brighten
+    
+    // Smooth transition from LOG to original graded video based on scroll
+    color = mix(logColor, color, uGradeAmount);
 
     // Scanline flicker on high glitch
     float scan = sin(vUv.y * 800.0 + uTime * 60.0) * 0.04 * uGlitch;

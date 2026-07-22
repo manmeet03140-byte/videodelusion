@@ -7,35 +7,59 @@ import { MathUtils } from 'three';
 import * as THREE from 'three';
 import { glitchVertexShader, glitchFragmentShader } from '@/shaders/glitch';
 
+interface VideoPlaneProps {
+  scrollProgress: React.MutableRefObject<number>;
+}
+
 /**
  * A displaced PlaneGeometry with a live video texture.
  * Hover/click drives the uGlitch uniform → datamosh / chromatic aberration.
  * Falls back to an animated procedural texture if no reel.mp4 is present.
  */
-export default function VideoPlane() {
+export default function VideoPlane({ scrollProgress }: VideoPlaneProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const glitchTarget = useRef(0);
   const glitchCurrent = useRef(0);
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   // ── Video texture (graceful fallback) ───────────────────────────────────
   const [videoLoaded, setVideoLoaded] = useState(false);
+  
   const videoTexture = useMemo(() => {
     if (typeof window === 'undefined') return null;
     const video = document.createElement('video');
-    video.src = '/reel.mp4';
+    video.src = '/16-10_1.mp4';
     video.crossOrigin = 'anonymous';
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
-    video.oncanplaythrough = () => setVideoLoaded(true);
-    video.onerror = () => { /* video failed to load — stay with fallback */ };
     video.play().catch(() => {/* silently ignore */});
+    
     const tex = new THREE.VideoTexture(video);
     tex.minFilter = THREE.LinearFilter;
     tex.magFilter = THREE.LinearFilter;
+    
+    videoRef.current = video;
     return tex;
+  }, []);
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    const video = videoRef.current;
+    
+    const handleCanPlay = () => setVideoLoaded(true);
+    video.addEventListener('canplaythrough', handleCanPlay);
+    
+    if (video.readyState >= 3) {
+      setVideoLoaded(true);
+    }
+    
+    return () => {
+      video.removeEventListener('canplaythrough', handleCanPlay);
+    };
   }, []);
 
   // ── Procedural fallback canvas texture ──────────────────────────────────
@@ -73,6 +97,7 @@ export default function VideoPlane() {
         uVideoTexture: { value: activeTexture },
         uGlitch: { value: 0.0 },
         uTime: { value: 0.0 },
+        uGradeAmount: { value: 0.0 },
       },
       side: THREE.FrontSide,
     });
@@ -95,6 +120,12 @@ export default function VideoPlane() {
     );
     mat.uniforms.uGlitch.value = glitchCurrent.current;
     mat.uniforms.uTime.value = clock.elapsedTime;
+    
+    // Grade amount interpolation based on scroll
+    // Scroll 0.0 to 0.1 transitions from LOG (0) to Final Grade (1)
+    const scroll = scrollProgress.current;
+    const gradeTarget = Math.max(0, Math.min(1, scroll * 6.0));
+    mat.uniforms.uGradeAmount.value = MathUtils.lerp(mat.uniforms.uGradeAmount.value, gradeTarget, 0.08);
 
     // Animate procedural fallback texture
     if (!videoLoaded) {
