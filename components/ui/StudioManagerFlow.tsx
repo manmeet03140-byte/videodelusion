@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useUIState } from '@/hooks/useUIState';
 
 const STEPS = [
+  { id: 'contact', title: 'Your Details', placeholder: 'Name & Email Address...' },
   { id: 'scope', title: 'Project Scope', placeholder: 'e.g., Commercial, Music Video, Short Film...' },
   { id: 'length', title: 'Video Length', placeholder: 'e.g., 60 seconds, 5 minutes...' },
   { id: 'references', title: 'Stylistic References', placeholder: 'URLs or descriptions of the vibe...' },
@@ -27,12 +28,10 @@ export default function StudioManagerFlow() {
     if (currentStep < STEPS.length - 1) {
       setCurrentStep(prev => prev + 1);
     } else {
-      // Submit
-      setIsSubmitted(true);
+      // Finalize and show the submission screen
       const finalData = { ...formData, [stepId]: inputValue };
-      console.log('--- STUDIO MANAGER PAYLOAD ---');
-      console.log(JSON.stringify(finalData, null, 2));
-      console.log('------------------------------');
+      setFormData(finalData);
+      setIsSubmitted(true);
     }
   };
 
@@ -58,10 +57,34 @@ export default function StudioManagerFlow() {
 
       <div className="w-[90vw] max-w-2xl bg-[#111] border border-[#333] p-10 rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.8)]">
         {isSubmitted ? (
-          <div className="text-center animate-pulse">
-            <h2 className="text-3xl font-light text-[#00FFE0] mb-4">Brief Generated</h2>
-            <p className="text-gray-400 font-mono text-sm">JSON payload logged to console.</p>
-            <p className="text-gray-500 font-mono text-xs mt-8">Awaiting backend integration...</p>
+          <div className="flex flex-col items-center text-center animate-in fade-in duration-500">
+            <h2 className="text-3xl font-light text-[#00FFE0] mb-4">Brief Ready to Send</h2>
+            <p className="text-gray-400 font-mono text-sm max-w-md mb-8">
+              Your project details have been compiled. Click below to open your email client and send the brief directly to me.
+            </p>
+            
+            <a 
+              href={`mailto:videodelusionn@gmail.com?subject=New Project Brief from ${encodeURIComponent(formData.contact || 'Client')}&body=${encodeURIComponent(
+                `Contact Details: ${formData.contact}\n\n` +
+                `Project Scope: ${formData.scope}\n\n` +
+                `Video Length: ${formData.length}\n\n` +
+                `Stylistic References: ${formData.references}\n\n` +
+                `Timeline & Budget: ${formData.timeline}`
+              )}`}
+              className="px-8 py-3 mb-10 bg-[#00FFE0] text-black font-bold font-mono uppercase tracking-widest text-sm rounded hover:bg-white transition-colors"
+            >
+              Send via Email ↗
+            </a>
+
+            <div className="w-full h-px bg-white/10 mb-8" />
+            
+            <p className="text-gray-500 font-mono text-xs mb-2">URGENT INQUIRIES?</p>
+            <p className="text-gray-300 font-mono text-sm mb-1">
+              If your project is urgent, reach out directly:
+            </p>
+            <p className="text-white font-mono text-sm">
+              Email: <a href="mailto:videodelusionn@gmail.com" className="text-[#00FFE0] hover:underline">videodelusionn@gmail.com</a>
+            </p>
           </div>
         ) : (
           <div className="flex flex-col h-full">

@@ -24,7 +24,7 @@ const initialNodes: Record<string, NodeConfig> = {
   skills: { id: 'skills', label: 'Skills', x: 200, y: 115, width: 80, parentId: 'root' },
 
   contact: { id: 'contact', label: 'Contact', x: 200, y: 165, width: 80, parentId: 'root' },
-  contact_email: { id: 'contact_email', label: 'Email', x: 350, y: 125, width: 80, parentId: 'contact', href: 'mailto:manmeet03140@gmail.com' },
+  contact_email: { id: 'contact_email', label: 'Email', x: 350, y: 125, width: 80, parentId: 'contact', href: 'mailto:videodelusionn@gmail.com' },
   contact_instagram: { id: 'contact_instagram', label: 'Instagram', x: 350, y: 165, width: 100, parentId: 'contact', href: 'https://youtube.com/shorts/GQNW1IlvhcY?si=HQdhOxmYOpX94HW8' },
   contact_call: { id: 'contact_call', label: 'Call', x: 350, y: 205, width: 80, parentId: 'contact', href: 'tel:+918264737223' },
 

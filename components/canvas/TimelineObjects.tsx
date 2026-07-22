@@ -142,7 +142,7 @@ export default function TimelineObjects({ scrollProgress }: TimelineObjectsProps
         anchorY="middle"
         letterSpacing={0.15}
       >
-        {`GET IN TOUCH\nmanmeet03140@gmail.com`}
+        {`GET IN TOUCH\nvideodelusionn@gmail.com`}
       </Text>
     </group>
   );
